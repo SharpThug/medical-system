@@ -1,0 +1,25 @@
+﻿# Build folders
+bin/
+obj/
+
+# Visual Studio
+**/.vs/
+*.user
+*.suo
+*.cache
+*.log
+
+# NuGet
+packages/
+*.nupkg
+
+# Rider
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local secrets
+*.local
+*.env
