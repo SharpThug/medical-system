@@ -3,7 +3,7 @@ bin/
 obj/
 
 # Visual Studio
-**/.vs/
+.vs/
 *.user
 *.suo
 *.cache
