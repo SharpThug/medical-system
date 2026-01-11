@@ -1,0 +1,2 @@
+﻿IF DB_ID('Db') IS NULL
+    CREATE DATABASE Db;

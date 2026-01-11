@@ -1,17 +1,17 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿using Api;
 
-// Add services to the container.
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+
+var dbInitializer = new DatabaseInitializer();
+await dbInitializer.Initialize(app);
+// ----------------------------------
 
 app.Run();

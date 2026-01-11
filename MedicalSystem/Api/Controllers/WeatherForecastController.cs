@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
@@ -17,7 +17,7 @@ namespace Api.Controllers
         {
             _logger = logger;
         }
-
+        /*
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -28,6 +28,6 @@ namespace Api.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
-        }
+        }*/
     }
 }
