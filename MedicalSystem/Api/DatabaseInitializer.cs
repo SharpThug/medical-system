@@ -7,14 +7,19 @@ namespace Api
         public async Task Initialize(WebApplication app)
         {
             var config = app.Configuration;
-            var connectionString = config.GetConnectionString("DefaultConnection");
+            var defaultConnectionString = config.GetConnectionString("DefaultConnection");
 
-            Console.WriteLine("Проверка существования базы данных...");
-
-            var masterBuilder = new SqlConnectionStringBuilder(connectionString)
+            var masterBuilder = new SqlConnectionStringBuilder(defaultConnectionString)
             {
                 InitialCatalog = "master"
             };
+
+            var dbBuilder = new SqlConnectionStringBuilder(defaultConnectionString)
+            {
+                InitialCatalog = "Db"
+            };
+
+            Console.WriteLine("Проверка существования базы данных...");
 
             using (var masterConn = new SqlConnection(masterBuilder.ConnectionString))
             {
@@ -30,6 +35,8 @@ namespace Api
                 else
                 {
                     Console.WriteLine("База данных не найдена. Создаём её...");
+
+                    // Скрипт создания базы
                     var createDbScript = Path.Combine(app.Environment.ContentRootPath, "Scripts", "01_CreateDatabase.sql");
                     var script = await File.ReadAllTextAsync(createDbScript);
 
@@ -40,7 +47,8 @@ namespace Api
                 }
             }
 
-            using var conn = new SqlConnection(connectionString);
+            // 2️⃣ Работаем с рабочей базой Db для таблиц и данных
+            using var conn = new SqlConnection(dbBuilder.ConnectionString);
             await conn.OpenAsync();
 
             bool departmentsExist = await CheckIfTableExists(conn, "Departments");
@@ -50,6 +58,7 @@ namespace Api
             {
                 Console.WriteLine("Создание таблиц и вставка данных...");
 
+                // Скрипт создания таблиц
                 var createTablesScript = Path.Combine(app.Environment.ContentRootPath, "Scripts", "02_CreateTables.sql");
                 var script = await File.ReadAllTextAsync(createTablesScript);
                 using (var cmd = new SqlCommand(script, conn))
@@ -58,6 +67,7 @@ namespace Api
                 }
                 Console.WriteLine("Таблицы созданы.");
 
+                // Скрипт seed данных
                 var seedDataScript = Path.Combine(app.Environment.ContentRootPath, "Scripts", "03_InsertSeedData.sql");
                 script = await File.ReadAllTextAsync(seedDataScript);
                 using (var cmd = new SqlCommand(script, conn))
@@ -71,6 +81,7 @@ namespace Api
                 Console.WriteLine("Таблицы уже существуют. Пропускаем создание и вставку данных.");
             }
 
+            // 3️⃣ Вывод данных в консоль
             await PrintData(conn);
         }
 
