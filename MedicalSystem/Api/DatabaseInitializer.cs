@@ -8,6 +8,8 @@ namespace Api
         {
             var config = app.Configuration;
             var defaultConnectionString = config.GetConnectionString("DefaultConnection");
+            var dropDbOnStart = config.GetValue<bool>("DatabaseSettings:DropDatabaseOnStart");
+
 
             var masterBuilder = new SqlConnectionStringBuilder(defaultConnectionString)
             {
@@ -19,11 +21,26 @@ namespace Api
                 InitialCatalog = "Db"
             };
 
+
             Console.WriteLine("Проверка существования базы данных...");
 
             using (var masterConn = new SqlConnection(masterBuilder.ConnectionString))
             {
                 await masterConn.OpenAsync();
+
+                if (dropDbOnStart)
+                {
+
+                    // 1️⃣ Выполнить DropDatabase.sql
+                    var dropDbScriptPath = Path.Combine(app.Environment.ContentRootPath, "Scripts", "DropDatabase.sql");
+                    var dropScript = await File.ReadAllTextAsync(dropDbScriptPath);
+
+                    using (var cmd = new SqlCommand(dropScript, masterConn))
+                    {
+                        await cmd.ExecuteNonQueryAsync();
+                        Console.WriteLine("Скрипт удаления базы выполнен.");
+                    }
+                }
 
                 var checkDbCommand = new SqlCommand("SELECT db_id('Db')", masterConn);
                 var exists = await checkDbCommand.ExecuteScalarAsync();
@@ -97,11 +114,11 @@ namespace Api
             Console.WriteLine("\nДанные из Departments:");
             if (await CheckIfTableExists(conn, "Departments"))
             {
-                var deptCmd = new SqlCommand("SELECT DepartmentID, DepartmentName, DepartmentCode, DepartmentType FROM Departments", conn);
+                var deptCmd = new SqlCommand("SELECT Id, Name, Code, Type FROM Departments", conn);
                 using var reader = await deptCmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
-                    Console.WriteLine($"ID: {reader["DepartmentID"]}, Name: {reader["DepartmentName"]}, Code: {reader["DepartmentCode"]}, Type: {reader["DepartmentType"]}");
+                    Console.WriteLine($"ID: {reader["Id"]}, Name: {reader["Name"]}, Code: {reader["Code"]}, Type: {reader["Type"]}");
                 }
             }
             else
@@ -112,7 +129,7 @@ namespace Api
             Console.WriteLine("\nДанные из Users:");
             if (await CheckIfTableExists(conn, "Users"))
             {
-                var userCmd = new SqlCommand("SELECT UserID, Login, FirstName, LastName, Role, DepartmentID FROM Users", conn);
+                var userCmd = new SqlCommand("SELECT Id, Login, LastName, FirstName, Role, DepartmentId FROM Users", conn);
                 using var reader = await userCmd.ExecuteReaderAsync();
                 while (await reader.ReadAsync())
                 {
