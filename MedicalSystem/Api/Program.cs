@@ -11,7 +11,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 var dbInitializer = new DatabaseInitializer();
-await dbInitializer.Initialize(app);
+await dbInitializer.Init(app);
 // ----------------------------------
 
 app.Run();

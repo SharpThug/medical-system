@@ -4,7 +4,7 @@ namespace Api
 {
     public class DatabaseInitializer
     {
-        public async Task Initialize(WebApplication app)
+        public async Task Init(WebApplication app)
         {
             IConfiguration config = app.Configuration;
             string masterConnectionString = config.GetConnectionString("MasterConnection")!;
@@ -12,51 +12,8 @@ namespace Api
             string dbName = config.GetValue<string>("DatabaseSettings:DatabaseName")!;
             bool dropDbOnStart = config.GetValue<bool>("DatabaseSettings:DropDatabaseOnStart");
 
-            Console.WriteLine("Проверка существования базы данных..."); //TODO: в лог полетит
 
-            using (SqlConnection masterConnection = new SqlConnection(masterConnectionString))
-            {
-                await masterConnection.OpenAsync();
-
-                if (dropDbOnStart)
-                {
-                    await DropDatabase(masterConnection, dbName);
-                }
-
-                SqlCommand checkDbCommand = new SqlCommand(
-                    "SELECT DB_ID(@dbName)",
-                    masterConnection
-                );
-
-                checkDbCommand.Parameters.AddWithValue("@dbName", dbName);
-                var exists = await checkDbCommand.ExecuteScalarAsync();
-
-                if (exists != DBNull.Value && exists != null)
-                {
-                    Console.WriteLine("База данных уже существует.");  //TODO: в лог полетит
-                }
-                else
-                {
-                    string createDbSql = $"CREATE DATABASE [{dbName}]";
-                    using var createCmd = new SqlCommand(createDbSql, masterConnection);
-                    await createCmd.ExecuteNonQueryAsync();
-
-                    Console.WriteLine("База данных создана успешно!");   //TODO: в лог полетит
-                }
-            }
-
-            using var conn = new SqlConnection(defaultConnectionString);
-            await conn.OpenAsync();
-
-            bool departmentsExist = await CheckIfTableExists(conn, "Departments");
-            bool usersExist = await CheckIfTableExists(conn, "Users");
-
-            if (!departmentsExist || !usersExist)
-            {
-                Console.WriteLine("Создание таблиц и вставка данных...");   //TODO: в лог полетит
-
-
-                string createAllTables = @"
+            string createAllTables = """
                 CREATE TABLE Patients (
                     Id BIGINT PRIMARY KEY IDENTITY(1,1),
                     CardNumber NVARCHAR(10) UNIQUE NOT NULL,
@@ -144,17 +101,57 @@ namespace Api
                     JSON NVARCHAR(MAX) NOT NULL,
                     CONSTRAINT FK_SavedFilters_Users FOREIGN KEY (UserId) REFERENCES Users(Id)
                 );
-                ";
+                """;
 
-                using (var cmd = new SqlCommand(createAllTables, conn))
-                {
-                    await cmd.ExecuteNonQueryAsync();
-                }
+
+            Console.WriteLine("Проверка существования базы данных..."); //TODO: в лог полетит
+
+            using SqlConnection masterConnection = new SqlConnection(masterConnectionString);
+            await masterConnection.OpenAsync();
+
+            if (dropDbOnStart)
+            {
+                await DropDatabase(masterConnection, dbName);
+            }
+
+            SqlCommand checkDbCommand = new SqlCommand(
+                "SELECT DB_ID(@dbName)",
+                masterConnection
+            );
+            checkDbCommand.Parameters.AddWithValue("@dbName", dbName);
+            object? databaseExists = await checkDbCommand.ExecuteScalarAsync();
+
+            if (databaseExists != DBNull.Value)
+            {
+                Console.WriteLine("База данных уже существует.");  //TODO: в лог полетит
+            }
+            else
+            {
+                SqlCommand createDbCommand = new SqlCommand(
+                    $"CREATE DATABASE [{dbName}]",
+                    masterConnection
+                );
+                await createDbCommand.ExecuteNonQueryAsync();
+
+                Console.WriteLine("База данных создана успешно!");   //TODO: в лог полетит
+            }
+
+
+            using SqlConnection connection = new SqlConnection(defaultConnectionString);
+
+            await connection.OpenAsync();
+
+            bool departmentsExist = await IsTableExists(connection, "Departments");
+            bool usersExist = await IsTableExists(connection, "Users");
+
+            if (!departmentsExist || !usersExist)
+            {
+                Console.WriteLine("Создание таблиц и вставка данных...");   //TODO: в лог полетит
+
+                using SqlCommand createAllTablesCommand = new SqlCommand(createAllTables, connection);
+                await createAllTablesCommand.ExecuteNonQueryAsync();
 
                 Console.WriteLine("Таблицы созданы.");    //TODO: в лог полетит
-
-
-
 
 
                 Console.WriteLine("Заполнение начальными данными...");      //TODO: в лог полетит
@@ -167,19 +164,19 @@ namespace Api
 
                 foreach (var dept in departments)
                 {
-                    string insertSql = @"
-                    IF NOT EXISTS (SELECT 1 FROM Departments WHERE Code = @Code)
-                    BEGIN
-                        INSERT INTO Departments (Name, Code, Type)
-                        VALUES (@Name, @Code, @Type)
-                    END";
+                    string insertDataSql = @"
+                        IF NOT EXISTS (SELECT 1 FROM Departments WHERE Code = @Code)
+                        BEGIN
+                            INSERT INTO Departments (Name, Code, Type)
+                            VALUES (@Name, @Code, @Type)
+                        END";
 
-                    using var cmd = new SqlCommand(insertSql, conn);
-                    cmd.Parameters.AddWithValue("@Name", dept.Name);
-                    cmd.Parameters.AddWithValue("@Code", dept.Code);
-                    cmd.Parameters.AddWithValue("@Type", dept.Type);
+                    using var insertDataCommand = new SqlCommand(insertDataSql, connection);
+                    insertDataCommand.Parameters.AddWithValue("@Name", dept.Name);
+                    insertDataCommand.Parameters.AddWithValue("@Code", dept.Code);
+                    insertDataCommand.Parameters.AddWithValue("@Type", dept.Type);
 
-                    await cmd.ExecuteNonQueryAsync();
+                    await insertDataCommand.ExecuteNonQueryAsync();
                 }
 
                 Console.WriteLine("Начальные данные успешно вставлены!");     //TODO: в лог полетит
@@ -189,20 +186,33 @@ namespace Api
                 Console.WriteLine("Таблицы уже существуют. Пропускаем создание и вставку данных.");     //TODO: в лог полетит
             }
 
-            await PrintData(conn);
+            await Print(connection);
         }
 
-        private async Task<bool> CheckIfTableExists(SqlConnection conn, string tableName)
+
+        //до сюда все ок  (сверху надо обработку ошибок)
+
+
+        private async Task<bool> IsTableExists(SqlConnection conn, string tableName)   //Все ок с методом
         {
-            var cmd = new SqlCommand($"IF OBJECT_ID('{tableName}', 'U') IS NOT NULL SELECT 1 ELSE SELECT 0", conn);
-            var result = await cmd.ExecuteScalarAsync();
+            SqlCommand cmd = new SqlCommand(
+                $"""
+                IF OBJECT_ID('{tableName}', 'U') IS NOT NULL 
+                    SELECT 1 
+                ELSE 
+                    SELECT 0
+                """,
+                conn
+            );
+            object? result = await cmd.ExecuteScalarAsync();
+
             return result != null && (int)result == 1;
         }
 
-        private async Task PrintData(SqlConnection conn)
+        private async Task Print(SqlConnection conn)   //SRP нарушено
         {
             Console.WriteLine("\nДанные из Departments:");                  //TODO: в лог полетит
-            if (await CheckIfTableExists(conn, "Departments"))
+            if (await IsTableExists(conn, "Departments"))
             {
                 var deptCmd = new SqlCommand("SELECT Id, Name, Code, Type FROM Departments", conn);
                 using var reader = await deptCmd.ExecuteReaderAsync();
@@ -217,7 +227,7 @@ namespace Api
             }
 
             Console.WriteLine("\nДанные из Users:");                    //TODO: в лог полетит
-            if (await CheckIfTableExists(conn, "Users"))
+            if (await IsTableExists(conn, "Users"))
             {
                 var userCmd = new SqlCommand("SELECT Id, Login, LastName, FirstName, Role, DepartmentId FROM Users", conn);
                 using var reader = await userCmd.ExecuteReaderAsync();
@@ -243,11 +253,21 @@ namespace Api
                     DROP DATABASE [{dbName}];
                 END";
 
-            using (var cmd = new SqlCommand(dropScript, masterConn))
-            {
-                await cmd.ExecuteNonQueryAsync();
-                Console.WriteLine($"База данных '{dbName}' удалена.");    //TODO: в лог полетит
-            }
+            using SqlCommand cmd = new SqlCommand(
+                $"""
+                USE master;
+
+                IF DB_ID('{dbName}') IS NOT NULL
+                BEGIN
+                    ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+                    DROP DATABASE [{dbName}];
+                END
+                """,
+                masterConn
+            );
+
+            await cmd.ExecuteNonQueryAsync();
+            Console.WriteLine($"База данных '{dbName}' удалена.");    //TODO: в лог полетит
         }
     }
 }
