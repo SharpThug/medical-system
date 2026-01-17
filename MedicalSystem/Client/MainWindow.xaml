@@ -4,9 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
+        xmlns:vm="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Авторизация" 
+        WindowState="Maximized">
 
+    <Window.DataContext>
+        <vm:LoginViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel>
+                <TextBox Name="txtLogin"
+         MinWidth="250"
+         MaxWidth="350"
+         Margin="0,0,0,10"
+         Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" />
+
+                <PasswordBox 
+    MinWidth="250"
+    MaxWidth="350"
+    Margin="0,0,0,20"
+    local:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+                <Button Content="Войти"
+        MinWidth="250"
+        MaxWidth="350"
+        Command="{Binding LoginCommand}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
