@@ -22,7 +22,7 @@ namespace Api
             User? user = await GetUserByLoginAsync(login);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                throw new UnauthorizedAccessException("Invalid login or password"); //другое исключение надо кидать
+                throw new InvalidCredentialsException("Invalid login or password");
             }
 
             return GenerateJwtToken(user);
@@ -47,7 +47,7 @@ namespace Api
 
             if (!await reader.ReadAsync())
             {
-                throw new UnauthorizedAccessException("Invalid login or password"); //другое исключение надо кидать
+                throw new InvalidCredentialsException("Invalid login or password"); //другое исключение надо кидать
             } 
 
             return new User
