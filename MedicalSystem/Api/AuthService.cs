@@ -8,81 +8,25 @@ namespace Api
 {
     public class AuthService : IAuthService
     {
-        private readonly string _connectionString;
-        private readonly string _jwtKey;
+        private readonly IUserRepository _userRepository;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(string connectionString, string jwtKey)
+        public AuthService(IUserRepository userRepository, IJwtService jwtService)
         {
-            _connectionString = connectionString;
-            _jwtKey = jwtKey;
+            _userRepository = userRepository;
+            _jwtService = jwtService;
         }
 
         public async Task<string> LoginAsync(string login, string password)
         {
-            User user = await GetUserByLoginAsync(login);
+            User user = await _userRepository.GetByLoginAsync(login);
 
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 throw new InvalidCredentialsException("Неверный логин или пароль");
             }
 
-            return GenerateJwtToken(user);
-        }
-
-        private async Task<User> GetUserByLoginAsync(string login)
-        {
-            await using var conn = new SqlConnection(_connectionString);
-            await conn.OpenAsync();
-
-            await using var cmd = new SqlCommand(
-                """
-            SELECT * 
-            FROM Users 
-            WHERE Login=@login AND IsActive=1
-            """,
-                conn
-            );
-            cmd.Parameters.AddWithValue("@login", login);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            if (!await reader.ReadAsync())
-            {
-                throw new UserNotFoundException("Пользователь с таким логином не найден");
-            } 
-
-            return new User
-            {
-                Id = (long)reader["Id"],
-                Login = (string)reader["Login"],
-                Password = (string)reader["Password"],
-                Role = (string)reader["Role"],
-                DepartmentId = (int)reader["DepartmentId"]
-            };
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            var key = Encoding.UTF8.GetBytes(_jwtKey);
-            var creds = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256
-            );
-
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Login),
-            new Claim(ClaimTypes.Role, user.Role)
-        };
-
-            var token = new JwtSecurityToken(
-                expires: DateTime.UtcNow.AddHours(12),
-                claims: claims,
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return _jwtService.GenerateJwtToken(user);
         }
     }
 }

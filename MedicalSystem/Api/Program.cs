@@ -14,7 +14,11 @@ builder.Services.AddSingleton<IDatabaseSeeder>(sp => new DatabaseSeedingService(
 builder.Services.AddSingleton<IDatabasePrinter>(sp => new DatabasePrinter(defaultConnectionString));
 builder.Services.AddSingleton<DatabaseInitializer>();
 
-builder.Services.AddSingleton<IAuthService>(sp => new AuthService(defaultConnectionString, jwtKey));
+builder.Services.AddSingleton<IUserRepository>(sp => new UserRepository(defaultConnectionString));
+
+builder.Services.AddSingleton<IJwtService>(sp => new JwtService(jwtKey));
+
+builder.Services.AddSingleton<IAuthService, AuthService>();
 
 builder.Services.AddControllers();
 
