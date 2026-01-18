@@ -31,6 +31,10 @@ namespace Api
             {
                 return Unauthorized(new ApiResponse<string>(false, null, ex.Message));
             }
+            catch (UserNotFoundException ex)
+            {
+                return Unauthorized(new ApiResponse<string>(false, null, ex.Message));
+            }
         }
     }
 }
