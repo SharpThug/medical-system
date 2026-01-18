@@ -3,7 +3,7 @@
     using Microsoft.Data.SqlClient;
     using Microsoft.Extensions.Logging;
 
-    public class DatabasePrinter : IDataPrinter
+    public class DatabasePrinter : IDatabasePrinter
     {
         private readonly string _connectionString;
 
