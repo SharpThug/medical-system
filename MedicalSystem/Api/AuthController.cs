@@ -27,9 +27,9 @@ namespace Api
                 string token = await _authService.LoginAsync(request.Login, request.Password);
                 return Ok(new ApiResponse<string>(true, token, null));
             }
-            catch (InvalidCredentialsException)
+            catch (InvalidCredentialsException ex)
             {
-                return Unauthorized(new ApiResponse<string>(false, null, "Неверный логин или пароль"));
+                return Unauthorized(new ApiResponse<string>(false, null, ex.Message));
             }
         }
     }

@@ -19,10 +19,11 @@ namespace Api
 
         public async Task<string> LoginAsync(string login, string password)
         {
-            User? user = await GetUserByLoginAsync(login);
+            User user = await GetUserByLoginAsync(login);
+
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                throw new InvalidCredentialsException("Invalid login or password");
+                throw new InvalidCredentialsException("Неверный логин или пароль");
             }
 
             return GenerateJwtToken(user);
