@@ -7,9 +7,9 @@ namespace Api
         private readonly IDatabaseService _dbService;
         private readonly ITableCreationService _tableCreator;
         private readonly IDatabaseSeeder _seedService;
-        private readonly IDataPrinter _printer;
+        private readonly IDatabasePrinter _printer;
 
-        public DatabaseInitializer(IDatabaseService dbService, ITableCreationService tableCreator, IDatabaseSeeder seedService, IDataPrinter printer)
+        public DatabaseInitializer(IDatabaseService dbService, ITableCreationService tableCreator, IDatabaseSeeder seedService, IDatabasePrinter printer)
         {
             _dbService = dbService;
             _tableCreator = tableCreator;
