@@ -21,7 +21,7 @@ namespace Api
         {
             User user = await GetUserByLoginAsync(login);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 throw new InvalidCredentialsException("Неверный логин или пароль");
             }
@@ -48,7 +48,7 @@ namespace Api
 
             if (!await reader.ReadAsync())
             {
-                throw new InvalidCredentialsException("Invalid login or password"); //другое исключение надо кидать
+                throw new UserNotFoundException("Пользователь с таким логином не найден");
             } 
 
             return new User
