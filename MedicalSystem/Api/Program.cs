@@ -10,7 +10,7 @@ bool dropDbOnStart = builder.Configuration.GetValue<bool>("DatabaseSettings:Drop
 builder.Services.AddSingleton<IDatabaseService>(sp => new DatabaseCreationService(masterConnectionString));
 builder.Services.AddSingleton<ITableCreationService>(sp => new TableCreationService(defaultConnectionString));
 builder.Services.AddSingleton<IDatabaseSeeder>(sp => new DatabaseSeedingService(defaultConnectionString));
-builder.Services.AddSingleton<IDataPrinter>(sp => new DatabasePrinter(defaultConnectionString));
+builder.Services.AddSingleton<IDatabasePrinter>(sp => new DatabasePrinter(defaultConnectionString));
 builder.Services.AddSingleton<DatabaseInitializer>();
 
 builder.Services.AddControllers();
