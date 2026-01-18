@@ -29,7 +29,7 @@ namespace Api
             }
             catch (InvalidCredentialsException)
             {
-                return Unauthorized("Неверный логин или пароль");
+                return Unauthorized(new ApiResponse<string>(false, null, "Неверный логин или пароль"));
             }
         }
     }
