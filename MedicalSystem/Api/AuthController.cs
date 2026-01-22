@@ -6,6 +6,8 @@ using System.Security.Claims;
 using System.Text;
 using BCrypt.Net;
 
+using Shared;
+
 namespace Api
 {
     [ApiController]

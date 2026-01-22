@@ -4,6 +4,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+using Shared;
+
 namespace Api
 {
     public class AuthService : IAuthService
@@ -19,12 +21,16 @@ namespace Api
 
         public async Task<string> LoginAsync(string login, string password)
         {
+            Console.WriteLine("Попытка авторизации");//логин и пароль тут выведешь еще
+
             User user = await _userRepository.GetByLoginAsync(login);
 
             if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 throw new InvalidCredentialsException("Неверный логин или пароль");
             }
+
+            Console.WriteLine("Успешная авторизация, сейчас будет сгенерирован JWT-токен");
 
             return _jwtService.GenerateJwtToken(user);
         }
