@@ -1,5 +1,7 @@
 ﻿using Api;
 
+using Shared;
+
 var builder = WebApplication.CreateBuilder(args);
 
 string masterConnectionString = builder.Configuration.GetConnectionString("MasterConnection")!;

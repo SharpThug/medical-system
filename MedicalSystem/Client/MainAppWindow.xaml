@@ -1,0 +1,12 @@
+﻿<Window x:Class="Client.MainAppWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Главное приложение" Height="300" Width="400"
+        Background="White">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Вы авторизованы!" FontSize="20" 
+                       HorizontalAlignment="Center" Foreground="Black"/>
+        </StackPanel>
+    </Grid>
+</Window>

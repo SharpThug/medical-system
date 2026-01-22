@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Shared;
+using System.ComponentModel;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -6,7 +8,14 @@ namespace Client
 {
     public class LoginViewModel : INotifyPropertyChanged
     {
+        private readonly IAuthService _authService;
+
         private string _login = string.Empty;
+
+        public LoginViewModel(IAuthService authService)
+        {
+            _authService = authService;
+        }
 
         public string Login
         {
@@ -21,17 +30,9 @@ namespace Client
             }
         }
 
-        public Task LoginAsync(string login, string password)
+        public async Task<string> LoginAsync(string login, string password)
         {
-            var request = new LoginRequest
-            {
-                Login = login,
-                Password = password
-            };
-
-            //вызов апишки
-
-            return Task.CompletedTask;
+            return await _authService.LoginAsync(login, password);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

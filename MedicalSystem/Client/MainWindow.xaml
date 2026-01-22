@@ -9,10 +9,6 @@
         Title="Авторизация" 
         WindowState="Maximized">
 
-    <Window.DataContext>
-        <vm:LoginViewModel />
-    </Window.DataContext>
-
     <Grid>
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel>
