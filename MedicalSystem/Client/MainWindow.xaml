@@ -17,22 +17,20 @@
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel>
                 <TextBox Name="txtLogin"
-         MinWidth="250"
-         MaxWidth="350"
-         Margin="0,0,0,10"
-         Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" />
+                         MinWidth="250"
+                         MaxWidth="350"
+                         Margin="0,0,0,10"
+                         Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" />
 
-                <PasswordBox 
-    MinWidth="250"
-    MaxWidth="350"
-    Margin="0,0,0,20"
-    local:PasswordHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+                <PasswordBox x:Name="PasswordBox"
+                             MinWidth="250"
+                             MaxWidth="350"
+                             Margin="0,0,0,20" />
 
                 <Button Content="Войти"
-        MinWidth="250"
-        MaxWidth="350"
-        Command="{Binding LoginCommand}" />
+                        MinWidth="250"
+                        MaxWidth="350"
+                        Click="LoginButton_Click" />
             </StackPanel>
         </Grid>
     </Grid>

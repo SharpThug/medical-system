@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Client
@@ -15,6 +16,7 @@ namespace Client
         }
 
         public event EventHandler? CanExecuteChanged;
+
         public bool CanExecute(object? parameter) => _canExecute?.Invoke(parameter) ?? true;
 
         public async void Execute(object? parameter) => await _execute(parameter);
