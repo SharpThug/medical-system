@@ -10,14 +10,16 @@ namespace Api
         {
             if (!context.ModelState.IsValid)
             {
-                var errors = context.ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .SelectMany(kvp => kvp.Value.Errors.Select(e => e.ErrorMessage))
-                    .ToList();
+                string error = context.ModelState
+                    .SelectMany(kvp => kvp.Value!.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .FirstOrDefault() ?? "Неверные данные";
 
-                var message = string.Join("; ", errors);
-
-                context.Result = new BadRequestObjectResult(ApiResponse<string>.Fail(message));
+                context.Result = new BadRequestObjectResult(new ApiResponse<string>(
+                    Success: false,
+                    Data: null,
+                    ErrorMessage: error
+                ));
             }
         }
     }
