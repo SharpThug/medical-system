@@ -13,7 +13,7 @@ namespace Api
     [ApiController]
     [Route("api/auth")]
     [ValidateModel]
-    public class AuthController : ControllerBase     //валидация должна быть
+    public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
 
@@ -23,7 +23,7 @@ namespace Api
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<ActionResult<ApiResponse<string>>> Login(LoginRequest request)
         {
             string token = await _authService.LoginAsync(request.Login, request.Password);
 
