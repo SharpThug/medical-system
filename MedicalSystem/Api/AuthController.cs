@@ -24,19 +24,9 @@ namespace Api
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            try
-            {
-                string token = await _authService.LoginAsync(request.Login, request.Password);
-                return Ok(new ApiResponse<string>(true, token, null));
-            }
-            catch (InvalidCredentialsException ex)
-            {
-                return Unauthorized(new ApiResponse<string>(false, null, ex.Message));
-            }
-            catch (UserNotFoundException ex)
-            {
-                return Unauthorized(new ApiResponse<string>(false, null, ex.Message));
-            }
+            string token = await _authService.LoginAsync(request.Login, request.Password);
+
+            return Ok(new ApiResponse<string>(true, token, null));
         }
     }
 }
