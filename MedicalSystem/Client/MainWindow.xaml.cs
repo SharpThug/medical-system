@@ -6,7 +6,6 @@ namespace Client
 {
     public partial class MainWindow : Window
     {
-
         private readonly IAuthService _authService;
 
         public MainWindow(IAuthService authService)
