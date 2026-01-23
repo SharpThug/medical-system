@@ -12,7 +12,8 @@ namespace Api
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : ControllerBase
+    [ValidateModel]
+    public class AuthController : ControllerBase     //валидация должна быть
     {
         private readonly IAuthService _authService;
 

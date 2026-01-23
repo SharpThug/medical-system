@@ -24,6 +24,12 @@ builder.Services.AddSingleton<IAuthService, AuthService>();
 
 builder.Services.AddControllers();
 
+builder.Services.AddControllers()
+       .ConfigureApiBehaviorOptions(options =>
+       {
+           options.SuppressModelStateInvalidFilter = true;
+       });
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
