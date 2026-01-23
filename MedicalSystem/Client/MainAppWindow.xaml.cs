@@ -25,44 +25,11 @@ namespace Client
         public MainAppWindow()
         {
             InitializeComponent();
-            LoadSampleData();
+            LoadDummyPatients();
             this.DataContext = this;
         }
 
-        private void LoadSampleData()
-        {
-            Patients = new ObservableCollection<Patient>
-            {
-                new Patient
-                {
-                    CardNumber = "X260000001",
-                    AppointmentDate = "15.02.2026",
-                    FullName = "Иванов Иван Иванович",
-                    BirthDate = "12.11.1999",
-                    Phone = "+79961005555",
-                    Gender = "М",
-                    Department = "Терапия",
-                    Diagnosis = "Халязион"
-                }
-                // Добавьте больше пациентов здесь
-            };
-
-            // Привязка DataGrid к коллекции
-            if (MainTabControl.Items[0] is TabItem firstTab)
-            {
-                if (firstTab.Content is Grid grid)
-                {
-                    foreach (var child in grid.Children)
-                    {
-                        if (child is DataGrid dataGrid)
-                        {
-                            dataGrid.ItemsSource = Patients;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        
 
         private void AddNewTab_Click(object sender, RoutedEventArgs e)
         {
@@ -80,6 +47,28 @@ namespace Client
 
             MainTabControl.Items.Insert(MainTabControl.Items.Count - 1, newTab);
             MainTabControl.SelectedItem = newTab;
+        }
+
+        private void LoadDummyPatients()
+        {
+            var patients = new List<Patient>();
+
+            for (int i = 1; i <= 50; i++)
+            {
+                patients.Add(new Patient
+                {
+                    CardNumber = $"CARD{i:000}",
+                    AppointmentDate = $"13.0{i % 12 + 1}.2026",
+                    FullName = $"Пациент {i}",
+                    BirthDate = $"01.0{i % 12 + 1}.198{i % 10}",
+                    Phone = $"+7 900 000 0{i:00}{i:00}",
+                    Gender = i % 2 == 0 ? "М" : "Ж",
+                    Department = i % 3 == 0 ? "Терапия" : "Хирургия",
+                    Diagnosis = i % 2 == 0 ? "ОРВИ" : "Грипп"
+                });
+            }
+
+            MainPatientsDataGrid.ItemsSource = patients; // <-- Имя DataGrid
         }
     }
 
