@@ -2,6 +2,6 @@
 {
     public interface IUserRepository
     {
-        Task<User> GetByLoginAsync(string login);
+        Task<User?> GetByLoginAsync(string login);
     }
 }
