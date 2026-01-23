@@ -2,7 +2,7 @@
 {
     public class UserNotFoundException : Exception
     {
-        public UserNotFoundException(string message) 
+        public UserNotFoundException(string message)
             : base(message) { }
     }
 }
