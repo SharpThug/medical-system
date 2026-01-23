@@ -33,8 +33,6 @@ namespace Client
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 
-            services.AddTransient<LoginViewModel>();
-
             services.AddTransient<MainWindow>();
         }
 

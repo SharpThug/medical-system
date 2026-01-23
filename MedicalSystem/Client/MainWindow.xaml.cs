@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Shared;
+using System.ComponentModel;
 using System.Windows;
 
 namespace Client
@@ -6,33 +7,22 @@ namespace Client
     public partial class MainWindow : Window
     {
 
-        private readonly LoginViewModel _viewModel;
+        private readonly IAuthService _authService;
 
-        public MainWindow()
+        public MainWindow(IAuthService authService)
         {
             InitializeComponent();
-
-            if (DesignerProperties.GetIsInDesignMode(this))
-            {
-                DataContext = new LoginViewModel(null);
-            }
+            _authService = authService;
         }
 
-        public MainWindow(LoginViewModel viewModel) : this()
-        {
-            DataContext = viewModel;
-        }
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginViewModel vm = (LoginViewModel)DataContext;
-
-            string login = vm.Login;
+            string login = txtLogin.Text;
             string password = PasswordBox.Password;
-
 
             try
             {
-                var token = await vm.LoginAsync(login, password);
+                string token = await _authService.LoginAsync(login, password);
                 Session.Token = token;
 
                 var mainAppWindow = new MainAppWindow();
