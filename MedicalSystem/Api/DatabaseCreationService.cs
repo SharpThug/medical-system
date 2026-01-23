@@ -2,7 +2,6 @@
 
 namespace Api
 {
-    
     public class DatabaseCreationService : IDatabaseService
     {
         private readonly string _connectionString;
