@@ -36,9 +36,6 @@ public class ExceptionHandlingMiddleware
             InvalidCredentialsException =>
                 (HttpStatusCode.Unauthorized, ex.Message),
 
-            UserNotFoundException =>
-                (HttpStatusCode.NotFound, ex.Message),
-
             _ =>
                 (HttpStatusCode.InternalServerError, "Внутренняя ошибка сервера")
         };
