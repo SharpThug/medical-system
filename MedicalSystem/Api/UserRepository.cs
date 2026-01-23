@@ -11,7 +11,7 @@ namespace Api
             _connectionString = connectionString;
         }
 
-        public async Task<User> GetByLoginAsync(string login)
+        public async Task<User?> GetByLoginAsync(string login)
         {
             await using var conn = new SqlConnection(_connectionString);
             await conn.OpenAsync();
@@ -30,7 +30,7 @@ namespace Api
 
             if (!await reader.ReadAsync())
             {
-                throw new UserNotFoundException("Пользователь с таким логином не найден");   //бизнесовое надо бросать из сервиса
+                return null;
             }
 
             return new User

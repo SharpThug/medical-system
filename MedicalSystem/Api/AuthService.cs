@@ -22,10 +22,9 @@ namespace Api
         public async Task<string> LoginAsync(string login, string password)
         {
             Console.WriteLine("Попытка авторизации");//логин и пароль тут выведешь еще
-
             User user = await _userRepository.GetByLoginAsync(login);
 
-            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
                 throw new InvalidCredentialsException("Неверный логин или пароль");
             }
