@@ -40,7 +40,7 @@ namespace Client
             this.Close();
         }
 
-        private void HeaderBorder_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Header_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
                 this.DragMove(); // Перетаскиваем окно за шапку

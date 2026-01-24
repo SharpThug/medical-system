@@ -6,8 +6,16 @@
         MinWidth="1000"
         WindowState="Maximized"
         WindowStyle="None"    
-        AllowsTransparency="True"
+        ResizeMode="CanResize"
         BorderBrush="DarkGray">
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CornerRadius="6"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+    
 
     <Window.Resources>
         <!-- Стиль для вкладок в стиле браузера -->
@@ -49,9 +57,9 @@
         </Grid.RowDefinitions>
 
 
-        <Border Grid.Row="0" Background="#0078D7" Height="40" MouseDown="HeaderBorder_MouseDown">
+        <Border Grid.Row="0" Background="#0078D7" Height="40">
             <Grid>
-                <Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions >
                     <ColumnDefinition Width="*"/>
                     <!-- Левый текст -->
                     <ColumnDefinition Width="Auto"/>
@@ -162,6 +170,5 @@
             </TabItem>
         </TabControl>
     </Grid>
-
     </Border>
 </Window>
