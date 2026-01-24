@@ -89,13 +89,18 @@
                     Padding="15,5"/>
                             </StackPanel>
 
-                            <!-- Период слева (заполняет остаток) -->
-                            <TextBlock VerticalAlignment="Center">
-            <Run Text="Период с "/>
-            <Run Text="13.01.2026"/>
-            <Run Text=" по "/>
-            <Run Text="13.02.2026"/>
-                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                <DatePicker x:Name="DateFromPicker" 
+                    SelectedDateChanged="DateFilter_Changed"
+                    Margin="0,0,10,0"
+                    Width="120"/>
+                                <!-- Фиксированная или минимальная ширина -->
+
+                                <DatePicker x:Name="DateToPicker"
+                    SelectedDateChanged="DateFilter_Changed"
+                    Margin="0,0,10,0"
+                    Width="120"/>
+                            </StackPanel>
 
                         </DockPanel>
                     </Border>
