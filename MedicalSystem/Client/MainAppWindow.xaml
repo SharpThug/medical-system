@@ -4,7 +4,10 @@
         Title="МИС ОКО" 
         MinHeight="600"
         MinWidth="1000"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        WindowStyle="None"    
+        AllowsTransparency="True"
+        BorderBrush="DarkGray">
 
     <Window.Resources>
         <!-- Стиль для вкладок в стиле браузера -->
@@ -35,14 +38,57 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
-        <!-- Таб-контрол занимает всё окно -->
-        <TabControl x:Name="MainTabControl"
-                    TabStripPlacement="Top"
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    SelectedIndex="0">
+    <Border BorderBrush="DarkGray" BorderThickness="2" CornerRadius="6" Background="White">
+
+        <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <!-- шапка -->
+            <RowDefinition Height="*"/>
+            <!-- основной контент -->
+        </Grid.RowDefinitions>
+
+
+        <Border Grid.Row="0" Background="#0078D7" Height="40" MouseDown="HeaderBorder_MouseDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <!-- Левый текст -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- Правая часть с кнопками и именем -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Левый текст -->
+                <TextBlock Text="МИС ОКО"
+                   Foreground="White"
+                   FontSize="16"
+                   VerticalAlignment="Center"
+                   Margin="10,0,0,0"
+                   Grid.Column="0"/>
+
+                <!-- Правая часть -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="1" Margin="0,0,10,0">
+                    <!-- Имя пользователя -->
+                    <TextBlock Text="Иван Иванов" Foreground="White" VerticalAlignment="Center"/>
+
+                    <!-- Кнопка "три точки" -->
+                    <Button Content="⋮" Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0"/>
+
+                    <!-- Стандартные кнопки -->
+                    <Button Content="–" Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0" Click="MinimizeButton_Click"/>
+                    <Button Content="□" Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0" Click="MaximizeRestoreButton_Click"/>
+                    <Button Content="✕" Width="30" Height="30" Background="Transparent" Foreground="White" BorderThickness="0" Click="CloseButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="1"
+                x:Name="MainTabControl"
+                TabStripPlacement="Top"
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                SelectedIndex="0">
             <TabControl.Resources>
                 <Style TargetType="TabItem" BasedOn="{StaticResource BrowserTabStyle}"/>
             </TabControl.Resources>
@@ -116,4 +162,6 @@
             </TabItem>
         </TabControl>
     </Grid>
+
+    </Border>
 </Window>
