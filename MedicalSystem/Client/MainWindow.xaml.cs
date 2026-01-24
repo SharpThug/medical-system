@@ -26,6 +26,7 @@ namespace Client
 
                 var mainAppWindow = new MainAppWindow();
                 mainAppWindow.Show();
+                this.Close();
 
             }
             catch (Exception ex)
