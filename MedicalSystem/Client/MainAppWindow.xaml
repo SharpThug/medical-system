@@ -7,15 +7,14 @@
         WindowState="Maximized" 
 
         BorderBrush="DarkGray">
-    
+
     <WindowChrome.WindowChrome>
         <WindowChrome
-            CaptionHeight="0"
             CornerRadius="0"
             GlassFrameThickness="0"
-            UseAeroCaptionButtons="False"/>
+            CaptionHeight = "0"
+            UseAeroCaptionButtons="True"/>
     </WindowChrome.WindowChrome>
-    
 
     <Window.Resources>
         <!-- Стиль для вкладок в стиле браузера -->
@@ -46,18 +45,19 @@
         </Style>
     </Window.Resources>
 
-    <Border BorderBrush="DarkGray" BorderThickness="2"  Background="White" >
+
+    <Border BorderBrush="DarkGray" BorderThickness="0"  Background="White" >
 
         <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <!-- шапка -->
-            <RowDefinition Height="*"/>
-            <!-- основной контент -->
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <!-- шапка -->
+                <RowDefinition Height="*"/>
+                <!-- основной контент -->
+            </Grid.RowDefinitions>
 
 
-            <Border Grid.Row="0" Background="#0078D7" Height="40">
+            <Border Grid.Row="0" Background="#0078D7">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <!-- Зона перетаскивания -->
@@ -72,13 +72,13 @@
         ========================== -->
                     <Grid Grid.Column="0"
               Background="Transparent"
-              MouseLeftButtonDown="Header_MouseDown">
+              MouseLeftButtonDown="MainAppWindow_MouseLeftButtonDown">
 
                         <TextBlock Text="МИС ОКО"
                        Foreground="White"
                        FontSize="16"
                        VerticalAlignment="Center"
-                       Margin="10,0,0,0"/>
+                       Margin="10,10,0,0"/>
                     </Grid>
 
 
@@ -88,41 +88,40 @@
         ========================== -->
                     <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
-                                
-                    VerticalAlignment="Center"
-                    Margin="0,0,10,0">
+                    VerticalAlignment="Stretch"
+                    Margin="0,0,10,1">
 
                         <TextBlock Text="Иван Иванов"
                        Foreground="White"
                        VerticalAlignment="Center"
                        Margin="0,0,10,0"/>
 
-                        <Button Content="⋮" Width="30" Height="40"
+                        <Button Content="⋮" Width="30" Height="27"
                     Background="Transparent"
                     Foreground="White"
                     BorderThickness="0"/>
 
-                        <Button Content="–" Width="30" Height="40"
+                        <Button Content="–" Width="30" Height="27"
                     Background="Transparent"
                     Foreground="White"
                     BorderThickness="0"
-                    Click="MinimizeButton_Click"/>
+                                Click="MinimizeButton_Click"/>
 
-                        <Button Content="□" Width="30" Height="40"
+                        <Button Content="□" Width="30" Height="27"
                     Background="Transparent"
                     Foreground="White"
                     BorderThickness="0"
-                    Click="MaximizeRestoreButton_Click"/>
+                                Click="MaximizeButton_Click"/>
 
-                        <Button Content="✕" Width="30" Height="40"
+                        <Button Content="✕" Width="30" Height="27"
                     Background="Transparent"
                     Foreground="White"
                     BorderThickness="0"
-                    Click="CloseButton_Click"/>
+                                Click="CloseButton_Click"
+    />
                     </StackPanel>
                 </Grid>
             </Border>
-
 
             <TabControl Grid.Row="1"
                 x:Name="MainTabControl"
@@ -130,54 +129,54 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 SelectedIndex="0">
-            <TabControl.Resources>
-                <Style TargetType="TabItem" BasedOn="{StaticResource BrowserTabStyle}"/>
-            </TabControl.Resources>
+                <TabControl.Resources>
+                    <Style TargetType="TabItem" BasedOn="{StaticResource BrowserTabStyle}"/>
+                </TabControl.Resources>
 
-            <!-- Вкладка Пациенты -->
-            <TabItem Header="Пациенты">
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <!-- Фильтры + кнопки -->
-                        <RowDefinition Height="*"/>
-                        <!-- Таблица -->
-                    </Grid.RowDefinitions>
+                <!-- Вкладка Пациенты -->
+                <TabItem Header="Пациенты">
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Фильтры + кнопки -->
+                            <RowDefinition Height="*"/>
+                            <!-- Таблица -->
+                        </Grid.RowDefinitions>
 
-                    <!-- Панель фильтров и кнопок -->
-                    <Border Grid.Row="0"
+                        <!-- Панель фильтров и кнопок -->
+                        <Border Grid.Row="0"
                             Background="#F0F0F0"
                             Padding="10"
                             CornerRadius="4"
                             Margin="0,0,0,10">
-                        <DockPanel LastChildFill="True">
-                            <!-- Кнопки справа -->
-                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                                <Button Content="Расширенный поиск"
+                            <DockPanel LastChildFill="True">
+                                <!-- Кнопки справа -->
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                                    <Button Content="Расширенный поиск"
                                         Margin="0,10,10,0"
                                         Padding="15,5"/>
-                                <Button Content="Новый пациент"
+                                    <Button Content="Новый пациент"
                                         Background="#0078D7"
                                         Foreground="White"
                                         Padding="15,5"/>
-                            </StackPanel>
+                                </StackPanel>
 
-                            <!-- Дата слева -->
-                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                                <DatePicker x:Name="DateFromPicker" 
+                                <!-- Дата слева -->
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+                                    <DatePicker x:Name="DateFromPicker" 
                                             SelectedDateChanged="DateFilter_Changed"
                                             Margin="0,0,10,0"
                                             Width="120"/>
-                                <DatePicker x:Name="DateToPicker"
+                                    <DatePicker x:Name="DateToPicker"
                                             SelectedDateChanged="DateFilter_Changed"
                                             Margin="0,0,10,0"
                                             Width="120"/>
-                            </StackPanel>
-                        </DockPanel>
-                    </Border>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
 
-                    <!-- DataGrid -->
-                    <DataGrid x:Name="MainPatientsDataGrid"
+                        <!-- DataGrid -->
+                        <DataGrid x:Name="MainPatientsDataGrid"
                               Grid.Row="1"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
@@ -188,20 +187,21 @@
                               GridLinesVisibility="All"
                               BorderBrush="DarkGray"
                               BorderThickness="2">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Номер карты" Binding="{Binding CardNumber}" Width="*" MinWidth="100"/>
-                            <DataGridTextColumn Header="Запись" Binding="{Binding AppointmentDate}" Width="*" MinWidth="100"/>
-                            <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="2*" MinWidth="200"/>
-                            <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate}" Width="*" MinWidth="120"/>
-                            <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="*" MinWidth="120"/>
-                            <DataGridTextColumn Header="Пол" Binding="{Binding Gender}" Width="*" MinWidth="70"/>
-                            <DataGridTextColumn Header="Отдел" Binding="{Binding Department}" Width="*" MinWidth="150"/>
-                            <DataGridTextColumn Header="Заболевание" Binding="{Binding Diagnosis}" Width="2*" MinWidth="200"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-        </TabControl>
-    </Grid>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Номер карты" Binding="{Binding CardNumber}" Width="*" MinWidth="100"/>
+                                <DataGridTextColumn Header="Запись" Binding="{Binding AppointmentDate}" Width="*" MinWidth="100"/>
+                                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="2*" MinWidth="200"/>
+                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate}" Width="*" MinWidth="120"/>
+                                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="*" MinWidth="120"/>
+                                <DataGridTextColumn Header="Пол" Binding="{Binding Gender}" Width="*" MinWidth="70"/>
+                                <DataGridTextColumn Header="Отдел" Binding="{Binding Department}" Width="*" MinWidth="150"/>
+                                <DataGridTextColumn Header="Заболевание" Binding="{Binding Diagnosis}" Width="2*" MinWidth="200"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+        </Grid>
     </Border>
 </Window>
