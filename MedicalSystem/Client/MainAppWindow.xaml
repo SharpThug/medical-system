@@ -46,7 +46,7 @@
     </Window.Resources>
 
 
-    <Border BorderBrush="DarkGray" BorderThickness="0"  Background="White" >
+    <Border BorderBrush="DarkGray" BorderThickness="2"  Background="White" >
 
         <Grid>
             <Grid.RowDefinitions>
@@ -72,7 +72,7 @@
         ========================== -->
                     <Grid Grid.Column="0"
               Background="Transparent"
-              MouseLeftButtonDown="MainAppWindow_MouseLeftButtonDown">
+              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
 
                         <TextBlock Text="МИС ОКО"
                        Foreground="White"
