@@ -4,13 +4,13 @@
         Title="МИС ОКО" 
         MinHeight="600"
         MinWidth="1000"
-        WindowState="Maximized"
-        WindowStyle="None"    
-        ResizeMode="CanResize"
+        WindowState="Maximized" 
+
         BorderBrush="DarkGray">
     
     <WindowChrome.WindowChrome>
         <WindowChrome
+
             CornerRadius="6"
             GlassFrameThickness="0"
             UseAeroCaptionButtons="False"/>
@@ -46,7 +46,7 @@
         </Style>
     </Window.Resources>
 
-    <Border BorderBrush="DarkGray" BorderThickness="2" CornerRadius="6" Background="White">
+    <Border BorderBrush="DarkGray" BorderThickness="2" CornerRadius="6" Background="White" >
 
         <Grid>
         <Grid.RowDefinitions>
@@ -154,7 +154,7 @@
                               HorizontalScrollBarVisibility="Auto"
                               GridLinesVisibility="All"
                               BorderBrush="DarkGray"
-                              BorderThickness="1">
+                              BorderThickness="2">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Номер карты" Binding="{Binding CardNumber}" Width="*" MinWidth="100"/>
                             <DataGridTextColumn Header="Запись" Binding="{Binding AppointmentDate}" Width="*" MinWidth="100"/>
