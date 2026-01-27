@@ -1,4 +1,6 @@
-﻿namespace Api
+﻿using Shared;
+
+namespace Api
 {
     public interface IPatientService
     {

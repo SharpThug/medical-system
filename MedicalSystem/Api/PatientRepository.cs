@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Shared;
+
+using Microsoft.Data.SqlClient;
 
 namespace Api
 {

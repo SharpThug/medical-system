@@ -5,6 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
+using Shared;
+
 namespace Client
 {
     public partial class PatientsPage : UserControl

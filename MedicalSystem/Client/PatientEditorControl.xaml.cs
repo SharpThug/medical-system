@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
+using Shared;
+
 namespace Client
 {
     public partial class PatientEditorControl : UserControl

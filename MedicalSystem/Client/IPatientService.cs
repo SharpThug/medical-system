@@ -1,4 +1,6 @@
-﻿namespace Client
+﻿using Shared;
+
+namespace Client
 {
     public interface IPatientService
     {

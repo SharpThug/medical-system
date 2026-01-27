@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
+using Shared;
+
 namespace Client
 {
     public partial class MainAppWindow : Window
