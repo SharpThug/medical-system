@@ -14,13 +14,19 @@ namespace Client
         private ICollectionView _patientsView;
         private Point _mousePosition; // Для корректного Drag при максимизированном окне
 
+        private readonly IPatientService _patientService;
+
         private int _newPatientCounter = 1;
 
-        public MainAppWindow()
+        public MainAppWindow(IPatientService patientService)
         {
             InitializeComponent();
 
             PatientsPageControl.RequestNewPatientTab += OpenNewPatientTab;
+
+            _patientService = patientService;
+
+            PatientsPageControl.SetPatientService(_patientService);
 
             //LoadDummyPatients();
         }
