@@ -29,12 +29,44 @@ namespace Client
         {
             var editor = new PatientEditorControl();
 
+            // Создаём кнопку крестика
+            var closeButton = new Button
+            {
+                Content = "✕",
+                Width = 16,
+                Height = 16,
+                Margin = new Thickness(5, 0, 0, 0),
+                Padding = new Thickness(0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var headerPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
+
+            var headerText = new TextBlock
+            {
+                Text = $"Новый пациент {_newPatientCounter++}",
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            headerPanel.Children.Add(headerText);
+            headerPanel.Children.Add(closeButton);
+
             var tab = new TabItem
             {
-                Header = $"Новый пациент {_newPatientCounter++}",
+                Header = headerPanel,
                 Content = editor
             };
 
+            // Подписка на крестик
+            closeButton.Click += (s, e) =>
+            {
+                MainTabControl.Items.Remove(tab);
+            };
+
+            // Событие сохранения пациента
             editor.PatientSaved += p =>
             {
                 PatientsPageControl.Patients.Add(p);
