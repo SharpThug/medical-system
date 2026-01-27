@@ -1,4 +1,4 @@
-﻿namespace Api
+﻿namespace Shared
 {
     public record ApiResponse<T>(
         bool Success,
