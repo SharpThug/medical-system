@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Text.Json;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -13,46 +15,60 @@ namespace Client
 
         public event Action RequestNewPatientTab;
 
+        private IPatientService _patientService;
+
         public PatientsPage()
         {
             InitializeComponent();
-            LoadDummyPatients();
+            //LoadDummyPatients();
         }
 
-        private void LoadDummyPatients()
+        public void SetPatientService(IPatientService patientService)
         {
-            Patients = new ObservableCollection<Patient>();
+            _patientService = patientService;
+            LoadPatientsAsync();
+        }
 
-            for (int i = 1; i <= 50; i++)
+
+
+        private async Task LoadPatientsAsync()
+        {
+            if (_patientService == null) return;
+
+            try
             {
-                Patients.Add(new Patient
-                {
-                    CardNumber = $"CARD{i:000}",
-                    AppointmentDate = new DateTime(2026, i % 12 + 1, 13),
-                    BirthDate = new DateTime(1980 + i % 10, i % 12 + 1, 1),
-                    FullName = $"Пациент {i}",
-                    Phone = $"+7 900 000 0{i:00}{i:00}",
-                    Gender = i % 2 == 0 ? "М" : "Ж",
-                    Department = i % 3 == 0 ? "Терапия" : "Хирургия",
-                    Diagnosis = i % 2 == 0 ? "ОРВИ" : "Грипп"
-                });
+                // Получаем JSON с сервиса
+                List<Patient> patients = await _patientService.GetPatientsAsync(3);
+
+ 
+
+                // Берем только данные
+                Patients = new ObservableCollection<Patient>(patients);
+
+                // Создаем view для фильтрации
+                _patientsView = CollectionViewSource.GetDefaultView(Patients);
+                _patientsView.Filter = FilterPatients;
+
+                // Привязываем к DataGrid
+                MainPatientsDataGrid.ItemsSource = _patientsView;
+               
+                
             }
-
-            _patientsView = CollectionViewSource.GetDefaultView(Patients);
-            _patientsView.Filter = FilterPatients;
-
-            MainPatientsDataGrid.ItemsSource = _patientsView;
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки пациентов: {ex.Message}");
+            }
         }
 
         private bool FilterPatients(object obj)
         {
-            if (obj is not Patient p) return false;
+            /*if (obj is not Patient p) return false;
 
             var from = DateFromPicker.SelectedDate;
             var to = DateToPicker.SelectedDate;
 
             if (from.HasValue && p.AppointmentDate < from.Value) return false;
-            if (to.HasValue && p.AppointmentDate > to.Value) return false;
+            if (to.HasValue && p.AppointmentDate > to.Value) return false;*/
 
             return true;
         }
@@ -66,17 +82,5 @@ namespace Client
         {
             RequestNewPatientTab?.Invoke();
         }
-    }
-
-    public class Patient
-    {
-        public string CardNumber { get; set; }
-        public DateTime AppointmentDate { get; set; }
-        public string FullName { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string Phone { get; set; }
-        public string Gender { get; set; }
-        public string Department { get; set; }
-        public string Diagnosis { get; set; }
     }
 }
