@@ -18,14 +18,14 @@ namespace Client
         {
             var p = new Patient
             {
-                FullName = NameBox.Text,
+                /*FullName = NameBox.Text,
                 CardNumber = "NEW",
                 AppointmentDate = DateTime.Now,
                 BirthDate = DateTime.Now.AddYears(-30),
                 Phone = "",
                 Gender = "М",
                 Department = "",
-                Diagnosis = ""
+                Diagnosis = ""*/
             };
             PatientSaved?.Invoke(p);
         }
