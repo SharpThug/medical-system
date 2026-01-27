@@ -25,7 +25,15 @@ namespace Client
 
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<IAuthService, Services.AuthService>(client =>
+            services.AddHttpClient<IAuthService, AuthService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7218/");
+                client.Timeout = TimeSpan.FromSeconds(30);
+                client.DefaultRequestHeaders.Add("User-Agent", "WpfClient");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddHttpClient<IPatientService, PatientService>(client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7218/");
                 client.Timeout = TimeSpan.FromSeconds(30);
@@ -34,6 +42,8 @@ namespace Client
             });
 
             services.AddTransient<MainWindow>();
+            services.AddTransient<PatientsPage>();
+            services.AddSingleton<MainAppWindow>();
         }
 
         protected override void OnExit(ExitEventArgs e)
