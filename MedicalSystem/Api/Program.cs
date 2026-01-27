@@ -17,10 +17,13 @@ builder.Services.AddSingleton<IDatabasePrinter>(sp => new DatabasePrinter(defaul
 builder.Services.AddSingleton<DatabaseInitializer>();
 
 builder.Services.AddSingleton<IUserRepository>(sp => new UserRepository(defaultConnectionString));
+builder.Services.AddSingleton<IPatientRepository>(sp => new PatientRepository(defaultConnectionString));
 
 builder.Services.AddSingleton<IJwtService>(sp => new JwtService(jwtKey));
 
 builder.Services.AddSingleton<IAuthService, AuthService>();
+
+builder.Services.AddSingleton<IPatientService, PatientService>();
 
 builder.Services.AddControllers();
 
