@@ -22,6 +22,8 @@ public class ExceptionHandlingMiddleware
         catch (Exception ex)
         {
             Console.WriteLine("Поймано исключение");//Залогировать потом нормально с параметрами
+            Console.WriteLine($"Сообщение: {ex.Message}");
+            Console.WriteLine($"Стек вызовов: {ex.StackTrace}");
 
             await HandleExceptionAsync(context, ex);
         }
