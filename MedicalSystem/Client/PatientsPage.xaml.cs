@@ -38,7 +38,7 @@ namespace Client
             try
             {
                 // Получаем JSON с сервиса
-                List<Patient> patients = await _patientService.GetPatientsAsync(3);
+                List<Patient> patients = await _patientService.GetPatientsAsync(60);
 
  
 
