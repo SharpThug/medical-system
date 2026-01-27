@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Shared;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Shared;
 
 namespace Client
 {

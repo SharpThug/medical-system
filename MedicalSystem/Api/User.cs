@@ -1,5 +1,4 @@
-﻿
-namespace Api
+﻿namespace Api
 {
     public class User
     {

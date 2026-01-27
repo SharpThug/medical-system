@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+
+using Microsoft.Data.SqlClient;
 
 namespace Api
 {

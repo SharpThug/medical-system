@@ -1,10 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
-using Shared;
+﻿using Shared;
 
 namespace Api
 {

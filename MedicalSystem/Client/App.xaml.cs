@@ -1,8 +1,9 @@
-﻿using Client;
-using Microsoft.Extensions.DependencyInjection;
-using Shared;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Windows;
+
+using Microsoft.Extensions.DependencyInjection;
+
+using Shared;
 
 namespace Client
 {

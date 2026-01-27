@@ -1,6 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-
-namespace Api
+﻿namespace Api
 {
     public class DatabaseInitializer
     {

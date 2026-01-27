@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using System.Text.Json;
+
 using Microsoft.AspNetCore.Diagnostics;
 
 using Shared;

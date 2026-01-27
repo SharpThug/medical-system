@@ -1,6 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using System.Data;
-using BCrypt.Net;
+﻿using System.Data;
+
+using Microsoft.Data.SqlClient;
 
 namespace Api
 {
