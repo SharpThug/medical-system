@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Client.Services
+namespace Client
 {
     public class AuthService : IAuthService
     {
