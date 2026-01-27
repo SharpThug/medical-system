@@ -2,6 +2,6 @@
 {
     public interface IPatientRepository
     {
-        public Task<List<Patient>> GetLastPatientsAsync(int count);
+        Task<List<Patient>> GetLastPatientsAsync(int count);
     }
 }
