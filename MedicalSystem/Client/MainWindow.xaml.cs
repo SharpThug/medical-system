@@ -1,4 +1,5 @@
-﻿using Shared;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Shared;
 using System.ComponentModel;
 using System.Windows;
 
@@ -8,10 +9,13 @@ namespace Client
     {
         private readonly IAuthService _authService;
 
-        public MainWindow(IAuthService authService)
+        private readonly IServiceProvider _serviceProvider;
+
+        public MainWindow(IAuthService authService, IServiceProvider serviceProvider)
         {
             InitializeComponent();
             _authService = authService;
+            _serviceProvider = serviceProvider;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -24,9 +28,11 @@ namespace Client
                 string token = await _authService.LoginAsync(login, password);
                 Session.Token = token;
 
-                var mainAppWindow = new MainAppWindow();
+                var mainAppWindow = _serviceProvider.GetRequiredService<MainAppWindow>();
                 mainAppWindow.Show();
-                this.Close();
+                    this.Close();
+
+
 
             }
             catch (Exception ex)
