@@ -2,6 +2,8 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Diagnostics;
 
+using Shared;
+
 namespace Api;
 
 public class ExceptionHandlingMiddleware
