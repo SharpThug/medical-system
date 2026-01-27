@@ -14,19 +14,77 @@ namespace Client
         private ICollectionView _patientsView;
         private Point _mousePosition; // Для корректного Drag при максимизированном окне
 
+        private int _newPatientCounter = 1;
+
         public MainAppWindow()
         {
             InitializeComponent();
 
-            LoadDummyPatients();
+            PatientsPageControl.RequestNewPatientTab += OpenNewPatientTab;
+
+            //LoadDummyPatients();
         }
 
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        private void OpenNewPatientTab()
+        {
+            var editor = new PatientEditorControl();
+
+            var tab = new TabItem
+            {
+                Header = $"Новый пациент {_newPatientCounter++}",
+                Content = editor
+            };
+
+            editor.PatientSaved += p =>
+            {
+                PatientsPageControl.Patients.Add(p);
+                PatientsPageControl.MainPatientsDataGrid.Items.Refresh();
+                MainTabControl.Items.Remove(tab);
+            };
+
+            editor.CloseRequested += () =>
+            {
+                MainTabControl.Items.Remove(tab);
+            };
+
+            MainTabControl.Items.Add(tab);
+            MainTabControl.SelectedItem = tab;
+        }
+
+        /*private void NewPatient_Click(object sender, RoutedEventArgs e)
+        {
+            var editor = new PatientEditorControl();
+
+            var tab = new TabItem
+            {
+                Header = $"Новый пациент {_newPatientCounter++}",
+                Content = editor
+            };
+
+            // сохранить пациента
+            editor.PatientSaved += p =>
+            {
+                Patients.Add(p);
+                _patientsView.Refresh();
+                MainTabControl.Items.Remove(tab);
+            };
+
+            // закрыть вкладку
+            editor.CloseRequested += () =>
+            {
+                MainTabControl.Items.Remove(tab);
+            };
+
+            MainTabControl.Items.Add(tab);
+            MainTabControl.SelectedItem = tab;
+        }*/
+
+        /*private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
             // Здесь можно добавить контекстное меню
             MessageBox.Show("Меню настроек или дополнительных действий", "Меню",
                 MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+        }*/
 
         // Кнопка сворачивания окна
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -112,7 +170,7 @@ namespace Client
         // =========================================================
         // ЗАГРУЗКА ДАННЫХ
         // =========================================================
-        private void LoadDummyPatients()
+        /*private void LoadDummyPatients()
         {
             Patients = new ObservableCollection<Patient>();
 
@@ -135,12 +193,12 @@ namespace Client
             _patientsView.Filter = FilterPatients;
 
             MainPatientsDataGrid.ItemsSource = _patientsView;
-        }
+        }*/
 
         // =========================================================
         // ФИЛЬТР
         // =========================================================
-        private bool FilterPatients(object obj)
+        /*private bool FilterPatients(object obj)
         {
             if (obj is not Patient p)
                 return false;
@@ -155,8 +213,8 @@ namespace Client
                 return false;
 
             return true;
-        }
-
+        }*/
+        
         // =========================================================
         // СОБЫТИЕ ИЗМЕНЕНИЯ ДАТЫ
         // =========================================================
@@ -179,15 +237,5 @@ namespace Client
     // =============================================================
     // МОДЕЛЬ
     // =============================================================
-    public class Patient
-    {
-        public string CardNumber { get; set; }
-        public DateTime AppointmentDate { get; set; }
-        public string FullName { get; set; }
-        public DateTime BirthDate { get; set; }
-        public string Phone { get; set; }
-        public string Gender { get; set; }
-        public string Department { get; set; }
-        public string Diagnosis { get; set; }
-    }
+    
 }

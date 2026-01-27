@@ -1,18 +1,18 @@
 ﻿<Window x:Class="Client.MainAppWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Client"
         Title="МИС ОКО" 
         MinHeight="600"
         MinWidth="1000"
-        WindowState="Maximized" 
-
+        WindowState="Maximized"
         BorderBrush="DarkGray">
 
     <WindowChrome.WindowChrome>
         <WindowChrome
             CornerRadius="0"
             GlassFrameThickness="0"
-            CaptionHeight = "0"
+            CaptionHeight="0"
             UseAeroCaptionButtons="True"/>
     </WindowChrome.WindowChrome>
 
@@ -45,163 +45,75 @@
         </Style>
     </Window.Resources>
 
-
-    <Border BorderBrush="DarkGray" BorderThickness="2"  Background="White" >
-
+    <Border BorderBrush="DarkGray" BorderThickness="2" Background="White">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <!-- шапка -->
                 <RowDefinition Height="*"/>
-                <!-- основной контент -->
+                <!-- TabControl -->
             </Grid.RowDefinitions>
 
-
+            <!-- =========================
+                 ШАПКА
+            ========================== -->
             <Border Grid.Row="0" Background="#0078D7">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <!-- Зона перетаскивания -->
                         <ColumnDefinition Width="*"/>
-
-                        <!-- Зона кнопок -->
+                        <!-- Drag зона -->
                         <ColumnDefinition Width="Auto"/>
+                        <!-- кнопки -->
                     </Grid.ColumnDefinitions>
 
-                    <!-- =========================
-             ЛЕВАЯ ЗОНА (Drag area)
-        ========================== -->
-                    <Grid Grid.Column="0"
-              Background="Transparent"
-              MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-
+                    <!-- Drag зона -->
+                    <Grid Grid.Column="0" Background="Transparent" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                         <TextBlock Text="МИС ОКО"
-                       Foreground="White"
-                       FontSize="16"
-                       VerticalAlignment="Center"
-                       Margin="10,10,0,0"/>
+                                   Foreground="White"
+                                   FontSize="16"
+                                   VerticalAlignment="Center"
+                                   Margin="10,10,0,0"/>
                     </Grid>
 
-
-                    <!-- =========================
-             ПРАВАЯ ЗОНА (buttons)
-             DragMove ТУТ НЕТ
-        ========================== -->
-                    <StackPanel Grid.Column="1"
-                    Orientation="Horizontal"
-                    VerticalAlignment="Stretch"
-                    Margin="0,0,10,1">
-
+                    <!-- Кнопки -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Stretch" Margin="0,0,10,1">
                         <TextBlock Text="Иван Иванов"
-                       Foreground="White"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"/>
-
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
                         <Button Content="⋮" Width="30" Height="27"
-                    Background="Transparent"
-                    Foreground="White"
-                    BorderThickness="0"/>
-
+                                Background="Transparent" Foreground="White" BorderThickness="0"/>
                         <Button Content="–" Width="30" Height="27"
-                    Background="Transparent"
-                    Foreground="White"
-                    BorderThickness="0"
+                                Background="Transparent" Foreground="White" BorderThickness="0"
                                 Click="MinimizeButton_Click"/>
-
                         <Button Content="□" Width="30" Height="27"
-                    Background="Transparent"
-                    Foreground="White"
-                    BorderThickness="0"
+                                Background="Transparent" Foreground="White" BorderThickness="0"
                                 Click="MaximizeButton_Click"/>
-
                         <Button Content="✕" Width="30" Height="27"
-                    Background="Transparent"
-                    Foreground="White"
-                    BorderThickness="0"
-                                Click="CloseButton_Click"
-    />
+                                Background="Transparent" Foreground="White" BorderThickness="0"
+                                Click="CloseButton_Click"/>
                     </StackPanel>
                 </Grid>
             </Border>
 
+            <!-- =========================
+                 TAB CONTROL
+            ========================== -->
             <TabControl Grid.Row="1"
-                x:Name="MainTabControl"
-                TabStripPlacement="Top"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                SelectedIndex="0">
+                        x:Name="MainTabControl"
+                        TabStripPlacement="Top"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        SelectedIndex="0">
                 <TabControl.Resources>
                     <Style TargetType="TabItem" BasedOn="{StaticResource BrowserTabStyle}"/>
                 </TabControl.Resources>
 
                 <!-- Вкладка Пациенты -->
                 <TabItem Header="Пациенты">
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <!-- Фильтры + кнопки -->
-                            <RowDefinition Height="*"/>
-                            <!-- Таблица -->
-                        </Grid.RowDefinitions>
-
-                        <!-- Панель фильтров и кнопок -->
-                        <Border Grid.Row="0"
-                            Background="#F0F0F0"
-                            Padding="10"
-                            CornerRadius="4"
-                            Margin="0,0,0,10">
-                            <DockPanel LastChildFill="True">
-                                <!-- Кнопки справа -->
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
-                                    <Button Content="Расширенный поиск"
-                                        Margin="0,10,10,0"
-                                        Padding="15,5"/>
-                                    <Button Content="Новый пациент"
-                                        Background="#0078D7"
-                                        Foreground="White"
-                                        Padding="15,5"/>
-                                </StackPanel>
-
-                                <!-- Дата слева -->
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                                    <DatePicker x:Name="DateFromPicker" 
-                                            SelectedDateChanged="DateFilter_Changed"
-                                            Margin="0,0,10,0"
-                                            Width="120"/>
-                                    <DatePicker x:Name="DateToPicker"
-                                            SelectedDateChanged="DateFilter_Changed"
-                                            Margin="0,0,10,0"
-                                            Width="120"/>
-                                </StackPanel>
-                            </DockPanel>
-                        </Border>
-
-                        <!-- DataGrid -->
-                        <DataGrid x:Name="MainPatientsDataGrid"
-                              Grid.Row="1"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False"
-                              IsReadOnly="True"
-                              SelectionMode="Single"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Auto"
-                              GridLinesVisibility="All"
-                              BorderBrush="DarkGray"
-                              BorderThickness="2">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Номер карты" Binding="{Binding CardNumber}" Width="*" MinWidth="100"/>
-                                <DataGridTextColumn Header="Запись" Binding="{Binding AppointmentDate}" Width="*" MinWidth="100"/>
-                                <DataGridTextColumn Header="ФИО" Binding="{Binding FullName}" Width="2*" MinWidth="200"/>
-                                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate}" Width="*" MinWidth="120"/>
-                                <DataGridTextColumn Header="Телефон" Binding="{Binding Phone}" Width="*" MinWidth="120"/>
-                                <DataGridTextColumn Header="Пол" Binding="{Binding Gender}" Width="*" MinWidth="70"/>
-                                <DataGridTextColumn Header="Отдел" Binding="{Binding Department}" Width="*" MinWidth="150"/>
-                                <DataGridTextColumn Header="Заболевание" Binding="{Binding Diagnosis}" Width="2*" MinWidth="200"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
+                    <local:PatientsPage x:Name="PatientsPageControl"/>
                 </TabItem>
             </TabControl>
-
         </Grid>
     </Border>
 </Window>
