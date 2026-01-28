@@ -7,7 +7,7 @@ namespace Client
 {
     public partial class App : Application
     {
-        private ServiceProvider _serviceProvider;
+        private ServiceProvider _serviceProvider = null!;
 
         protected override void OnStartup(StartupEventArgs e)
         {
