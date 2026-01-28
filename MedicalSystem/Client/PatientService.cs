@@ -10,30 +10,29 @@ namespace Client
     {
         private readonly HttpClient _httpClient;
 
-
         public PatientService(HttpClient httpClient)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _httpClient = httpClient;
         }
 
-        public async Task<List<Patient>> GetPatientsAsync(int count)
+        public async Task<ApiResponse<List<Patient>>> GetPatientsAsync(int count)
         {
+            string apiUrl = $"api/patient?count={count}";
+            HttpResponseMessage response;
+
             try
             {
-                string apiUrl = $"https://localhost:7218/api/patient?count={count}";
-
-                // Парсим ApiResponse<List<Patient>>
-                var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<Patient>>>(apiUrl);
-
-                if (response == null || !response.Success)
-                    return new List<Patient>();
-
-                return response.Data ?? new List<Patient>();
+                response = await _httpClient.GetAsync(apiUrl);
+                response.EnsureSuccessStatusCode();
             }
-            catch (Exception ex)
+            catch (HttpRequestException httpEx)
             {
-                throw new Exception("Ошибка при получении пациентов с API: " + ex.Message, ex);
+                throw new Exception($"Ошибка сети или API: {httpEx.Message}. Проверьте доступность API.");
             }
+
+            ApiResponse<List<Patient>>? result = await response.Content.ReadFromJsonAsync<ApiResponse<List<Patient>>>();
+
+            return result ?? throw new InvalidOperationException("Ответ от сервера пуст или невалиден");
         }
     }
 }

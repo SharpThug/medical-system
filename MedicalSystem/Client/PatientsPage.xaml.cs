@@ -21,7 +21,6 @@ namespace Client
         public PatientsPage()
         {
             InitializeComponent();
-            //LoadDummyPatients();
         }
 
         public void SetPatientService(IPatientService patientService)
@@ -36,15 +35,11 @@ namespace Client
         {
             if (_patientService == null) return;
 
-            try
+            ApiResponse<List<Patient>> response = await _patientService.GetPatientsAsync(60);
+
+            if (response.Success)
             {
-                // Получаем JSON с сервиса
-                List<Patient> patients = await _patientService.GetPatientsAsync(60);
-
- 
-
-                // Берем только данные
-                Patients = new ObservableCollection<Patient>(patients);
+                Patients = new ObservableCollection<Patient>(response.Data!);
 
                 // Создаем view для фильтрации
                 _patientsView = CollectionViewSource.GetDefaultView(Patients);
@@ -52,13 +47,12 @@ namespace Client
 
                 // Привязываем к DataGrid
                 MainPatientsDataGrid.ItemsSource = _patientsView;
-               
-                
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Ошибка загрузки пациентов: {ex.Message}");
+                //обработка ошибки
             }
+
         }
 
         private bool FilterPatients(object obj)

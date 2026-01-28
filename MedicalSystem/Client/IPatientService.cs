@@ -4,6 +4,6 @@ namespace Client
 {
     public interface IPatientService
     {
-        Task<List<Patient>> GetPatientsAsync(int count);
+        Task<ApiResponse<List<Patient>>> GetPatientsAsync(int count);
     }
 }
