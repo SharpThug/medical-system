@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Client
 {
@@ -16,6 +17,16 @@ namespace Client
 
             // Асинхронная загрузка пациентов
             vm.LoadPatientsAsync();
+
+            // Подписка на создание новой вкладки
+            vm.RequestNewPatientTab += () =>
+            {
+                // Родительское окно открывает вкладку
+                if (Window.GetWindow(this) is MainAppWindow mainWindow)
+                {
+                    mainWindow.OpenNewPatientTab();
+                }
+            };
         }
     }
 }

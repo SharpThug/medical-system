@@ -12,9 +12,11 @@
             <DockPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                     <Button Content="Расширенный поиск" Margin="0,0,10,0" Padding="15,5"/>
-                    <Button Content="Новый пациент" Background="#0078D7" Foreground="White"
-                            Padding="15,5"
-                            Command="{Binding NewPatientCommand}"/>
+                    <Button Content="Новый пациент"
+                        Background="#0078D7"
+                        Foreground="White"
+                        Padding="15,5"
+                        Command="{Binding NewPatientCommand}"/> 
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">

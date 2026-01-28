@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Shared;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Data;
-
-using Shared;
+using System.Windows.Input;
 
 namespace Client
 {
@@ -12,6 +12,8 @@ namespace Client
     {
         private readonly IPatientService _patientService;
         private ICollectionView _patientsView;
+
+        public ICommand NewPatientCommand { get; }
 
         public ObservableCollection<Patient> Patients { get; set; } = new ObservableCollection<Patient>();
 
@@ -44,6 +46,8 @@ namespace Client
             // Создаем view для фильтрации
             PatientsView = CollectionViewSource.GetDefaultView(Patients);
             PatientsView.Filter = FilterPatients;
+
+            NewPatientCommand = new RelayCommand(NewPatientCommandExecute);
         }
 
         private bool FilterPatients(object obj)

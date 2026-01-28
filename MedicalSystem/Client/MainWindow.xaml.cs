@@ -25,7 +25,7 @@ namespace Client
             PatientsPageControl.Initialize(patientService);
         }
 
-        private void OpenNewPatientTab()
+        public void OpenNewPatientTab()
         {
             var editor = new PatientEditorControl();
 
