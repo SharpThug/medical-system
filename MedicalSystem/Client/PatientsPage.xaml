@@ -28,7 +28,7 @@
 
         <DataGrid x:Name="MainPatientsDataGrid" Grid.Row="1"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding PatientsView}"
+                  ItemsSource="{Binding FilteredPatients}"
                   CanUserAddRows="False"
                   IsReadOnly="True"
                   SelectionMode="Single"
