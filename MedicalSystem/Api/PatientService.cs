@@ -13,9 +13,7 @@ namespace Api
 
         public async Task<List<Patient>> GetLastPatientsAsync(int count)
         {
-            var patients = await _patientRepository.GetLastPatientsAsync(count);
-
-            return patients;
+            return await _patientRepository.GetLastPatientsAsync(count);
         }
     }
 }
