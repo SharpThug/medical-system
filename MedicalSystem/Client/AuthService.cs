@@ -12,40 +12,32 @@ namespace Client
 
         public AuthService(HttpClient httpClient)
         {
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+            _httpClient = httpClient;
         }
 
-        public async Task<string> LoginAsync(string login, string password)
+        public async Task<ApiResponse<string>> LoginAsync(string login, string password)
         {
+            LoginRequest request = new LoginRequest
+            {
+                Login = login,
+                Password = password
+            };
+
+            HttpResponseMessage response;
+
             try
             {
-                var request = new LoginRequest
-                {
-                    Login = login,
-                    Password = password
-                };
-
-                var response = await _httpClient.PostAsJsonAsync("api/auth/login", request);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                    return result?.Token ?? string.Empty;
-                }
-                else
-                {
-                    var errorContent = await response.Content.ReadAsStringAsync();
-                    throw new Exception($"Ошибка авторизации: {response.StatusCode}. {errorContent}");
-                }
+                response = await _httpClient.PostAsJsonAsync("api/auth/login", request);
+                response.EnsureSuccessStatusCode();
             }
             catch (HttpRequestException httpEx)
             {
-                throw new Exception($"Ошибка сети: {httpEx.Message}. Проверьте доступность API по адресу https://localhost:7218");
+                throw new Exception($"Ошибка сети или API: {httpEx.Message}. Проверьте доступность API.");//потом сделаешь в глобальный handler отлов ошибок
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Ошибка при авторизации: {ex.Message}");
-            }
+
+            ApiResponse<string>? result = await response.Content.ReadFromJsonAsync<ApiResponse<string>>();
+
+            return result ?? throw new InvalidOperationException("Ответ от сервера пуст или невалиден");
         }
     }
 }

@@ -25,22 +25,22 @@ namespace Client
             string login = txtLogin.Text;
             string password = PasswordBox.Password;
 
-            try
+
+            ApiResponse<string> response = await _authService.LoginAsync(login, password);
+
+            if (response.Success)
             {
-                string token = await _authService.LoginAsync(login, password);
-                Session.Token = token;
+                Session.Token = response.Data!;
 
                 var mainAppWindow = _serviceProvider.GetRequiredService<MainAppWindow>();
                 mainAppWindow.Show();
-                    this.Close();
-
-
-
+                this.Close();
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Ошибка авторизации: {ex.Message}");
+                //обработаешь ошибку
             }
         }
     }
 }
+
