@@ -21,11 +21,8 @@ namespace Client
         {
             InitializeComponent();
 
-            PatientsPageControl.RequestNewPatientTab += OpenNewPatientTab;
-
-            _patientService = patientService;
-
-            PatientsPageControl.SetPatientService(_patientService);
+            // После того как XAML создал PatientsPageControl
+            PatientsPageControl.Initialize(patientService);
         }
 
         private void OpenNewPatientTab()
@@ -69,13 +66,7 @@ namespace Client
                 MainTabControl.Items.Remove(tab);
             };
 
-            // Событие сохранения пациента
-            editor.PatientSaved += p =>
-            {
-                PatientsPageControl.Patients.Add(p);
-                PatientsPageControl.MainPatientsDataGrid.Items.Refresh();
-                MainTabControl.Items.Remove(tab);
-            };
+            
 
             editor.CloseRequested += () =>
             {

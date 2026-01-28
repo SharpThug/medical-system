@@ -13,18 +13,20 @@
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                     <Button Content="Расширенный поиск" Margin="0,0,10,0" Padding="15,5"/>
                     <Button Content="Новый пациент" Background="#0078D7" Foreground="White"
-                            Padding="15,5" Click="NewPatient_Click"/>
+                            Padding="15,5"
+                            Command="{Binding NewPatientCommand}"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                    <DatePicker x:Name="DateFromPicker" SelectedDateChanged="DateFilter_Changed" Margin="0,0,10,0" Width="120"/>
-                    <DatePicker x:Name="DateToPicker" SelectedDateChanged="DateFilter_Changed" Margin="0,0,10,0" Width="120"/>
+                    <DatePicker SelectedDate="{Binding DateFrom}" Margin="0,0,10,0" Width="120"/>
+                    <DatePicker SelectedDate="{Binding DateTo}" Margin="0,0,10,0" Width="120"/>
                 </StackPanel>
             </DockPanel>
         </Border>
 
         <DataGrid x:Name="MainPatientsDataGrid" Grid.Row="1"
                   AutoGenerateColumns="False"
+                  ItemsSource="{Binding PatientsView}"
                   CanUserAddRows="False"
                   IsReadOnly="True"
                   SelectionMode="Single"
